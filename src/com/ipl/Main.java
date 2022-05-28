@@ -24,23 +24,21 @@ public class Main {
     public static final int PLYAER_OF_MATCH = 13;
     public static final int VENUE = 14;
 
-
     public static void main(String[] args) {
         List<Match> matches = getMatchesData();
-        List<Deliver> deliveries = getDeliveriesData();
+        List<Delivery> deliveries = getDeliveriesData();
 
         findNumberOfMatchesPlayedPerTeam(matches);
         findNumberOfMatchesWonPerTeamInAllSeasons(matches);
-        findExtrarunsConcededPerTeamIn2016(matches, deliveries);
+        findExtraRunsConcededPerTeamIn2016(matches, deliveries);
         findMostEconomicalBowlerIn2015(matches, deliveries);
        findNumberOfMatchesHappenedInaEachCityOverTheEntireSeasons(matches);
-
     }
 
-    private static List<Deliver> getDeliveriesData() {
-        List<Deliver> deliveries = new ArrayList<>();
+    private static List<Delivery> getDeliveriesData() {
+        List<Delivery> deliveries = new ArrayList<>();
 
-        String deliverFilePath = "/home/jyothi/Downloads/archive (1)/deliveries.csv";
+        String deliverFilePath = "src/files/deliveries.csv";
 
         BufferedReader reader = null;
         String line = "";
@@ -61,7 +59,7 @@ public class Main {
 
                 String[] fields = line.split(",");
 
-                Deliver delivery = new Deliver();
+                Delivery delivery = new Delivery();
 
                 delivery.setDeliveryMatchId(fields[0]);
                 delivery.setInnings(fields[1]);
@@ -93,7 +91,7 @@ public class Main {
     private static List<Match> getMatchesData() {
         List<Match> matches = new ArrayList<>();
 
-        String matchFilePath = "/home/jyothi/Downloads/archive (1)/matches.csv";
+        String matchFilePath = "src/files/matches.csv";
 
         BufferedReader reader = null;
         String line = "";
@@ -167,7 +165,7 @@ public class Main {
 
     }
 
-    private static void findExtrarunsConcededPerTeamIn2016(List<Match> matches, List<Deliver> deliveries) {
+    private static void findExtraRunsConcededPerTeamIn2016(List<Match> matches, List<Delivery> deliveries) {
         Map<String, Integer> map = new HashMap<>();
         List<Integer> ids2016 = new ArrayList<>();
         for (int i = 0; i < matches.size(); i++) {
@@ -175,6 +173,7 @@ public class Main {
             if (yr == 2016)
                 ids2016.add(Integer.valueOf(matches.get(i).getMatchId()));
         }
+
         for (int i = 0; i < deliveries.size(); i++) {
             int matchId = Integer.valueOf(deliveries.get(i).getDeliveryMatchId());
             String team = deliveries.get(i).getBowlingTeam();
@@ -192,15 +191,17 @@ public class Main {
             System.out.println(entry.getKey() + " : " + entry.getValue());
     }
 
-    private static void findMostEconomicalBowlerIn2015(List<Match> matches, List<Deliver> deliveries) {
+    private static void findMostEconomicalBowlerIn2015(List<Match> matches, List<Delivery> deliveries) {
         Map<String, Integer> map = new HashMap<>();
         Map<String, Integer> map1 = new HashMap<>();
         List<Integer> ids2015 = new ArrayList<>();
+
         for (int i = 0; i < matches.size(); i++) {
             int yr = Integer.valueOf(matches.get(i).getSeason());
             if (yr == 2015)
                 ids2015.add(Integer.valueOf(deliveries.get(i).getDeliveryMatchId()));
         }
+
         for (int i = 0; i < deliveries.size(); i++) {
             int matchId = Integer.valueOf(deliveries.get(i).getDeliveryMatchId());
             String team = deliveries.get(i).getBowlingTeam();
@@ -230,9 +231,6 @@ public class Main {
         for (Map.Entry<String, Integer> entry : map1.entrySet())
             System.out.println(entry.getKey() + " : " + entry.getValue());
     }
-
-
-
 
    private static void findNumberOfMatchesHappenedInaEachCityOverTheEntireSeasons(List<Match> matches) {
        Map<String, Integer> map = new HashMap<>();
